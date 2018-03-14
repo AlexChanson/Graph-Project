@@ -1,4 +1,5 @@
 import pprint
+import random as rd
 
 class Graph:
     def __init__(self):
@@ -7,6 +8,9 @@ class Graph:
     def addNode(self, label):
         if not self.graph.keys().__contains__(label):
             self.graph[label] = set()
+
+    def getNodes(self):
+        return self.graph.keys()
 
     def addEdge(self, label1, label2):
         if label1 in self.graph.keys() and label2 in self.graph.keys():
@@ -19,43 +23,6 @@ class Graph:
         if label in self.graph.keys():
             return self.graph[label]
         return set()
-
-    def depthFirst(self, start):
-        visited, stack = list(), [start]
-        while stack:
-            node = stack.pop()
-            if node not in visited:
-                visited.append(node)
-                stack.extend(self.graph[node] - set(visited))
-        return visited
-
-    def depthFirstIter(self):
-        pass
-
-    def breadthFirst(self, label):
-        nout = []
-        nmarked = set()
-
-        def explore(node):
-            children = self.children(node)
-            m = list()
-            #print("node=", node, "children=", children, "visited=", nmarked)
-            for child in children:
-                if child not in nmarked:
-                    nmarked.add(child)
-                    nout.append(child)
-                    m.append(child)
-            for child in m:
-                explore(child)
-
-        nmarked.add(label)
-        nout.append(label)
-        explore(label)
-        return nout
-
-
-    def breadthFirstIter(self):
-        pass
 
     def importCSV(self, path):
         with open(path, mode="r") as file:
@@ -70,3 +37,23 @@ class Graph:
             if right not in self.graph.keys():
                 self.graph[right] = set()
             self.graph[left].add(right)
+
+    def random(self, n, q):
+        for i in range(n):
+            self.graph[i] = []
+        genenerated = 0
+        def lam(x):
+            return x[0]
+        q = min(2*n*n, q)
+        all_nodes = list(self.graph.keys())
+        while genenerated < q:
+            origin = rd.choice(all_nodes)
+            destination = origin
+            while origin == destination:
+                destination = rd.choice(all_nodes)
+            if destination not in map(lam, self.graph[origin]):
+                genenerated += 1
+                cout = rd.randint(1,10)
+                self.graph[origin].append((destination, cout))
+
+

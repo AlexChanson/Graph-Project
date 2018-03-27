@@ -3,8 +3,11 @@ import random as rd
 
 
 class Graph:
-    def __init__(self):
-        self.graph = {}
+    def __init__(self, dic=None):
+        if dic is not None:
+            self.graph = dic
+        else:
+            self.graph = {}
 
     def addNode(self, label):
         if not self.graph.keys().__contains__(label):

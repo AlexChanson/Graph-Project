@@ -9,7 +9,7 @@ def minimum(M, d):
     return chosen, minimum
 
 
-def dijkstra(graph, source):
+def dijkstra(graph, source, f=lambda x: x):
     F = {source}
     S = graph.getNodes()
     M = S - F
@@ -17,11 +17,12 @@ def dijkstra(graph, source):
     d = {source: 0}
 
     for child, weight in graph.children(source):
-        d[child] = weight
+        #print(child, weight)
+        d[child] = f(weight)
 
     p = {}
     for item in S:
-        p[item] = 1
+        p[item] = source
 
     while len(M) > 0:
         m, dm = minimum(M, d)
@@ -31,7 +32,7 @@ def dijkstra(graph, source):
             M.remove(m)
             for child, value in graph.children(m):
                 if child in M:
-                    cout = dm + value
+                    cout = dm + f(value)
                     if cout < d.get(child, cout + 1):
                         d[child] = cout
                         p[child] = m

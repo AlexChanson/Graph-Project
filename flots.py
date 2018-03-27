@@ -23,27 +23,30 @@ def busacker_gowen(graph, entre, sortie):
     while found:
         p, d = dijkstra(Graph(graph), entre, lambda x: x[3]*x[2])
         current = p[sortie]
-        chain = [current]
+        chain = [current, sortie]
         #print(p)
         while current is not entre:
             current = p[current]
             chain.insert(0, current)
-        #print(p, d)
+        #print("Chain", chain)
         deltas = list()
         for i in range(len(chain) - 1):
             suivant = list(filter(lambda x : x[0] == chain[i+1], graph[chain[i]]))[0]
             #print(suivant)
             deltas.append(suivant[1][1] - suivant[1][3])
-        print("Deltas", deltas)
+        #print("Deltas", deltas)
         delta = min(deltas)
+        print("d", delta)
         if delta <= 0:
             found = False
         else:
             for i in range(len(chain) - 1):
                 suivant = list(filter(lambda x: x[0] == chain[i + 1], graph[chain[i]]))[0]
                 new = (suivant[0], (suivant[1][0], suivant[1][1], suivant[1][2], suivant[1][3] + delta))
+                print("Suivant", suivant, "New", new)
                 graph[chain[i]].remove(suivant)
                 graph[chain[i]].append(new)
+            pprint(graph)
 
             V += delta
             C += delta*len(chain)

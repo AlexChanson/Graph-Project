@@ -1,6 +1,7 @@
 import pprint
 import random as rd
 
+
 class Graph:
     def __init__(self):
         self.graph = {}

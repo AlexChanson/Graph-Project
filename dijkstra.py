@@ -1,6 +1,6 @@
 from graph import Graph
 
-
+# paire (destination, cout)
 demo = {1:[(2, 10), (3,3), (5,6)],
         2:[(1,0)],
         3:[(2,4), (5,2)],
@@ -8,6 +8,12 @@ demo = {1:[(2, 10), (3,3), (5,6)],
         5:[(2,0), (6,1)],
         6:[(1,2), (2,1)]}
 
+# triplet (destination, min, max, cost)
+flots = {
+    'E': [(1,0,3), (2,0,3)],
+    1: [(3,1,2)],
+    2: []
+}
 
 def minimum(M, d):
     chosen, minimum = None, None
@@ -25,9 +31,8 @@ def dijkstra(graph, source):
     S = graph.getNodes()
     M = S - F
 
-    d = {}
+    d = {source: 0}
 
-    d[source] = 0
     for child, weight in graph.children(source):
         d[child] = weight
 

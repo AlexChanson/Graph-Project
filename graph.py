@@ -42,10 +42,11 @@ class Graph:
                 self.graph[right] = set()
             self.graph[left].add(right)
 
-    def random(self, n, q):
+    def random(self, n, q, f=lambda x: rd.randint(1, 10)):
         for i in range(n):
             self.graph[i] = []
         genenerated = 0
+
         def lam(x):
             return x[0]
         q = min(2*n*n, q)
@@ -57,7 +58,6 @@ class Graph:
                 destination = rd.choice(all_nodes)
             if destination not in map(lam, self.graph[origin]):
                 genenerated += 1
-                cout = rd.randint(1,10)
-                self.graph[origin].append((destination, cout))
+                self.graph[origin].append((destination, f))
 
 

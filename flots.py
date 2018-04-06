@@ -1,5 +1,6 @@
 from pprint import pprint
-
+from dijkstra import dijkstra
+from graph import Graph
 
 # Prend un graphe et retourne le flot nul correspondant
 def getFlotNul(graph):
@@ -15,8 +16,6 @@ def getFlotNul(graph):
 
 
 def busacker_gowen(graph, entre, sortie):
-    from dijkstra import dijkstra
-    from graph import Graph
     graph = getFlotNul(graph)
     V = 0
     C = 0
@@ -52,9 +51,4 @@ def busacker_gowen(graph, entre, sortie):
             V += delta
             C += delta * len(chain)
     return graph
-
-
-def rd_flots():
-    from random import randint
-    return randint(0, 5), randint(5, 10), randint(0, 7)
 

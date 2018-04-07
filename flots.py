@@ -42,7 +42,8 @@ def busacker_gowen(graph, entre, sortie):
             suivant = list(filter(lambda x: x[0] == chain[i + 1], graph[chain[i]]))[0]
             # print(suivant)
             deltas.append(suivant[1][1] - suivant[1][3])
-        # print("Deltas", deltas)
+        print(chain)
+        print("Deltas", deltas)
         delta = min(deltas)
         #print("d", delta)
         if delta <= 0:
@@ -56,7 +57,9 @@ def busacker_gowen(graph, entre, sortie):
                 graph[chain[i]].append(new)
             #pprint(graph)
 
+            print(d[(entre, sortie)])
+            print(delta)
             V += delta
-            C += delta * len(chain)
-    return graph
+            C += delta * d[(entre, sortie)]
+    return graph, V, C
 

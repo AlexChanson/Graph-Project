@@ -15,6 +15,9 @@ def pathReconstruction(p, u, v):
         path.append(u)
     return path
 
+def ecartGraph(graph):
+    pass
+
 def busacker_gowen(graph, entre, sortie):
     graph = getFlotNul(graph)
     V = 0

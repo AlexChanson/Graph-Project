@@ -24,6 +24,9 @@ class Graph:
         if label1 in self.graph.keys() and label2 in self.graph.keys():
             self.graph[label1].add(label2)
 
+    def removeEdge(self, nodeFrom, nodeTo):
+        self.graph[nodeFrom] = list(filter(lambda x: x[0] != nodeTo, self.graph.setdefault(nodeFrom, [])))
+
     def display(self):
         pprint.pprint(self.graph)
 

@@ -54,6 +54,9 @@ class Graph:
         else:
             return defaultValue
 
+    def getAllEdges(self):
+        return sum(list(map(lambda x: [(x[0], y[0], y[1] ) for y in x[1]] , self.graph.items())),[])
+
     def nodeExists(self, node):
         if self.getEdgesFrom(node, None):
             return True

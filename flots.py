@@ -16,7 +16,8 @@ def pathReconstruction(p, u, v):
     return path
 
 def ecartGraph(graph):
-    pass
+    newGraph = graph.fmap(id)
+
 
 def busacker_gowen(graph, entre, sortie):
     graph = getFlotNul(graph)

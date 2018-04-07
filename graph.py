@@ -86,6 +86,13 @@ class Graph:
     def getNpMatrix(selfs):
         numpy.matrix
 
+    def fmap(self, f):
+        returnedGraph = {}
+
+        for (node, children) in self.graph.items():
+            returnedGraph[node] = list(map(lambda x: (x[0], f(x[1])), children))
+        return Graph(returnedGraph)
+
 
 
 

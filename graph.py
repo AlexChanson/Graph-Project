@@ -6,7 +6,11 @@ from random import randint, choice
 class Graph:
     def __init__(self, dic={}):
         if dic is not None:
-            self.graph = dic
+            self.graph = {}
+            for pn, l in dic.items():
+                self.graph[pn] = l
+                for (node, v) in l:
+                    self.graph.setdefault(node, [])
         else:
             self.graph = {}
 
@@ -14,7 +18,7 @@ class Graph:
         return self.graph.setdefault(node, [])
 
     def getNodes(self):
-        return list(map(lambda x: x[0], self.graph.keys()))
+        return list(set(map(lambda x: x, self.graph.keys())))
 
     def addEdge(self, label1, label2):
         if label1 in self.graph.keys() and label2 in self.graph.keys():
@@ -41,7 +45,7 @@ class Graph:
 
     def getEdgeValue(self, nodeFrom, nodeTo, defaultValue=None):
         children = self.getEdgesFrom(nodeFrom)
-        res = list( filter(lambda x: x[0] == nodeTo, children) )
+        res = list(filter(lambda x: x[0] == nodeTo, children) )
         if res:
             return res[0][1]
         else:

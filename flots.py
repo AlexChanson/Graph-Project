@@ -1,5 +1,5 @@
 from pprint import pprint
-from dijkstra import dijkstra
+from floyd import floyd2 as floyd
 from graph import Graph
 
 # Prend un graphe et retourne le flot nul correspondant
@@ -21,14 +21,14 @@ def busacker_gowen(graph, entre, sortie):
     C = 0
     found = True
     while found:
-        p, d = dijkstra(Graph(graph), entre, lambda x: x[3] * x[2])
-        current = p[sortie]
+        p, d = floyd(Graph(graph).fmap(lambda x: x[2]*x[3]))
+        current = p[(entre, sortie)]
         chain = [current, sortie]
-        # print(p)
+        print(p)
         while current is not entre:
-            current = p[current]
+            current = p[(entre, current)]
             chain.insert(0, current)
-        # print("Chain", chain)
+        print("Chain", chain)
         deltas = list()
         for i in range(len(chain) - 1):
             suivant = list(filter(lambda x: x[0] == chain[i + 1], graph[chain[i]]))[0]

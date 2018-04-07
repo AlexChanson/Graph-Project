@@ -1,9 +1,9 @@
 import pprint
-import random as rd
+from random import randint, choice
 
 
 class Graph:
-    def __init__(self, dic=None):
+    def __init__(self, dic={}):
         if dic is not None:
             self.graph = dic
         else:
@@ -28,36 +28,94 @@ class Graph:
             return self.graph[label]
         return set()
 
-    def importCSV(self, path):
-        with open(path, mode="r") as file:
-            lines = file.readlines()
+    def getEdgesFrom(self, node, defaultValue=[]):
+        return self.graph.get(node, defaultValue)
 
-        for line in lines:
-            left, right = line.split(",")
-            left = left.strip("\n")
-            right = right.strip("\n")
-            if left not in self.graph.keys():
-                self.graph[left] = set()
-            if right not in self.graph.keys():
-                self.graph[right] = set()
-            self.graph[left].add(right)
+    def getEdgesTo(self, node):
+        edges = []
+        for (key, children) in self.graph.items():
+            for (childNode, edgeValue) in children:
+                if (childNode == node):
+                    edges.append((key, edgeValue))
+        return edges
 
-    def random(self, n, q):
+    def getEdgeValue(self, nodeFrom, nodeTo, defaultValue=None):
+        children = self.getEdgesFrom(nodeFrom)
+        res = list( filter(lambda x: x[0] == nodeTo, children) )
+        if res:
+            return res[0][1]
+        else:
+            return defaultValue
+
+    def nodeExists(self, node):
+        if self.getEdgesFrom(node, None):
+            return True
+        for (nodeFrom, children) in self.graph.items():
+            for (nodeTo,value) in children:
+                if nodeTo == node:
+                    return True
+        return False
+
+    def setEdgeValue(self, nodeFrom, nodeTo, value):
+        children = self.getEdgesFrom(nodeFrom, None)
+        if children:
+            found = False
+            for i, edge in enumerate(children):
+                if edge[0] == nodeTo:
+                    found = True
+                    children[i] = (nodeTo, value)
+                    break
+            if not found:
+                children.append((nodeTo, value))
+        else:
+            self.graph[nodeFrom] = [(nodeTo, value)]
+        return self
+
+    def random(self, n, q, f=lambda x: randint(1, 10)):
         for i in range(n):
             self.graph[i] = []
         genenerated = 0
+
         def lam(x):
             return x[0]
         q = min(2*n*n, q)
         all_nodes = list(self.graph.keys())
         while genenerated < q:
-            origin = rd.choice(all_nodes)
+            origin = choice(all_nodes)
             destination = origin
             while origin == destination:
-                destination = rd.choice(all_nodes)
+                destination = choice(all_nodes)
             if destination not in map(lam, self.graph[origin]):
                 genenerated += 1
-                cout = rd.randint(1,10)
-                self.graph[origin].append((destination, cout))
+                self.graph[origin].append((destination, f))
 
 
+
+
+class MatrixGraph(Graph):
+    def __init__(self, dic={}):
+        if dic is not None:
+            self.matrix = {}
+        else:
+            self.matrix = {}
+
+    def addNode(self, label):
+        pass
+
+    def getNodes(self):
+        pass
+
+    def addEdge(self, label1, label2):
+        pass
+
+    def display(self):
+        pprint.pprint(self.matrix)
+
+    def children(self, label):
+        pass
+
+    def importCSV(self, path):
+        pass
+
+    def random(self, n, q):
+        pass

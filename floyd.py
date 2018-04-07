@@ -1,20 +1,14 @@
 import numpy as np
-from graph import *
 
-
-def cout(graph, i, j):
-    pass
-
-
-def floyd(graph):
-    n = graph.countNodes()
+def floyd(adj_matrix, f=lambda x:x):
+    n = adj_matrix.shape[0]
     p = np.zeros(shape=(n, n))
     d = np.empty(shape=(n, n))
     d[:] = np.inf
 
     for i in range(n):
         for j in range(n):
-            d[i, j] = cout(graph, i, j)
+            d[i, j] = f(adj_matrix(i, j))
             p[i, j] = i
 
     for k in range(n):
@@ -23,6 +17,7 @@ def floyd(graph):
                 if d[i, k] + d[k, j] < d[i, j]:
                     d[i, j] = d[i, k] + d[k, j]
                     p[i, j] = k
+    return p, d
 
 
 def floyd2(graph):

@@ -31,19 +31,19 @@ def floyd2(graph):
     n = len(allnodes)
     p = {}
     d = {}
-    print(allnodes)
 
     for i in allnodes:
         for j in allnodes:
             edgeVal = graph.getEdgeValue(i, j, math.inf) if i != j else 0
-            d[(i, j)] = edgeVal if type(edgeVal) is tuple else edgeVal
-            p[(i, j)] = i
+            d[(i, j)] = edgeVal
+            p[(i, j)] = j
 
     for k in allnodes:
         for i in allnodes:
             for j in allnodes:
                 g = d[(i, j)]
-                if tryAdd(d[(i, k)] , d[(k, j)]) < g:
-                    d[(i, j)] = tryAdd(d.get((i, k), math.inf) ,d.get((k, j), math.inf ))
-                    p[(i, j)] = k
+                h = tryAdd(d.get((i, k), math.inf) ,d.get((k, j), math.inf ))
+                if h < g:
+                    d[(i, j)] = h
+                    p[(i, j)] = p[(i,k)]
     return p, d

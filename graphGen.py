@@ -32,3 +32,23 @@ def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.5, f=rd_flots):
 
     pprint(graph)
     return graph
+
+
+
+def random(self, n, q, f=lambda x: randint(1, 10)):
+    for i in range(n):
+        self.graph[i] = []
+    genenerated = 0
+
+    def lam(x):
+        return x[0]
+    q = min(2*n*n, q)
+    all_nodes = list(self.graph.keys())
+    while genenerated < q:
+        origin = choice(all_nodes)
+        destination = origin
+        while origin == destination:
+            destination = choice(all_nodes)
+        if destination not in map(lam, self.graph[origin]):
+            genenerated += 1
+            self.graph[origin].append((destination, f))

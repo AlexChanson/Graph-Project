@@ -9,12 +9,11 @@ class Graph:
         else:
             self.graph = {}
 
-    def addNode(self, label):
-        if not self.graph.keys().__contains__(label):
-            self.graph[label] = set()
+    def addNode(self, node):
+        return self.graph.setdefault(node, [])
 
     def getNodes(self):
-        return self.graph.keys()
+        return list(map(lambda x: x[0], self.graph.keys()))
 
     def addEdge(self, label1, label2):
         if label1 in self.graph.keys() and label2 in self.graph.keys():
@@ -69,25 +68,16 @@ class Graph:
                 children.append((nodeTo, value))
         else:
             self.graph[nodeFrom] = [(nodeTo, value)]
+        if not self.nodeExists(nodeTo):
+            self.addNode(nodeTo)
         return self
 
-    def random(self, n, q, f=lambda x: randint(1, 10)):
-        for i in range(n):
-            self.graph[i] = []
-        genenerated = 0
+    def nodeNumber(self):
+        return len(self.graph)
 
-        def lam(x):
-            return x[0]
-        q = min(2*n*n, q)
-        all_nodes = list(self.graph.keys())
-        while genenerated < q:
-            origin = choice(all_nodes)
-            destination = origin
-            while origin == destination:
-                destination = choice(all_nodes)
-            if destination not in map(lam, self.graph[origin]):
-                genenerated += 1
-                self.graph[origin].append((destination, f))
+    def edgeNumber(self):
+        return sum(len(x) for x in self.graph.itervalues())
+
 
 
 

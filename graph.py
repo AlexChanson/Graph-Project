@@ -1,4 +1,5 @@
 import pprint
+import numpy
 from random import randint, choice
 
 
@@ -77,6 +78,9 @@ class Graph:
 
     def edgeNumber(self):
         return sum(len(x) for x in self.graph.itervalues())
+
+    def getNpMatrix(selfs):
+        numpy.matrix
 
 
 

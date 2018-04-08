@@ -1,49 +1,43 @@
 from queue import Queue
+import busacker_gowen as bg
 
-def fordFulkerson(flow, startNode, endNode):
-    q = Queue()
+
+def chaineAmeliorante(flow, startNode, endNode):
+    q = []
     marking = set()
 
+    ret = [startNode]
+
     marking.add(startNode)
-    q.put(startNode)
+    q.append(startNode)
 
-    while not (q.empty() or endNode in marking):
-        x = q.get()
+    cond = True
+    while cond:
+        x = q.pop(0)
+        addNode = True
+        for y, label in filter(lambda k: k[0] not in marking, flow.getEdgesFrom(x)):
+            _min, _max, cost, actual = label
 
-        for y, label in filter(lambda k: not k in marking, flow.getEdgesFrom(x)):
-            _min, _max, cost = label
-
-            if cost < _max and not endNode in marking:
+            if actual < _max:
+                if addNode and x == ret[-1]:
+                    ret.append(y)
+                    addNode = False
                 marking.add(y)
-                q.put(y)
+                q.append(y)
 
-        if not endNode in marking:
-            for y, label in filter(lambda k: not k in marking, flow.getEdgesTo(x)):
-                _min, _max, cost = label
+        for y, label in filter(lambda k: k[0] not in marking, flow.getEdgesTo(x)):
+            _min, _max, cost, actual = label
 
-                if cost > _min:
-                    marking.add(y)
-                    q.put(y)
-
-    if endNode in marking:
-        ret = None
-        y = q.get()
-
-        while y != startNode:
-            y = q.get()
-
-        while y != endNode:
-            if y == startNode:
-                ret = Queue()
-
-            ret.put(y)
-
-            y = q.get()
-
-        ret.put(endNode)
-
+            if actual > _min:
+                marking.add(y)
+                q.append(y)
+        cond = len(q) > 0 and endNode not in marking
+    if ret[-1] == endNode:
         return ret
     else:
-        return None
+        return []
+
+def fordFulkerson(graph, starting, ending):
+    return chaineAmeliorante(bg.getFlotNul(graph), starting, ending)
 
 fordFulkerson.__setattr__("authors", ["Clement Derouet", "Christopher Vallot"])

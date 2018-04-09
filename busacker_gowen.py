@@ -29,7 +29,7 @@ def ecartGraph(graph):
             val = cout
             newGraph.setEdgeValue(x, y, val)
         if current > 0:
-            val = -cout
+            val = cout
             newGraph.setEdgeValue(y, x, val)
     return newGraph
 
@@ -70,8 +70,15 @@ def busacker_gowen(graph, entre, sortie):
             break
 
         for i in range(len(chain) - 1):
-            _min, _max, _unit_cost, _current = graph.getEdgeValue(chain[i], chain[i + 1])
-            new = (_min, _max, _unit_cost, _current + delta)
+            edge = graph.getEdgeValue(chain[i], chain[i + 1])
+            if edge is None:
+                edge = graph.getEdgeValue(chain[i + 1], chain[i])
+                _min, _max, _unit_cost, _current = edge
+                new = (_min, _max, _unit_cost, _current - delta)
+            else:
+                _min, _max, _unit_cost, _current = edge
+                new = (_min, _max, _unit_cost, _current + delta)
+
             graph.setEdgeValue(chain[i], chain[i + 1], new)
 
         flux += delta

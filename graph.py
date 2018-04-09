@@ -21,7 +21,11 @@ class Graph:
         return self.graph.setdefault(node, [])
 
     def getNodes(self):
-        return list(set(map(lambda x: x, self.graph.keys())))
+        nodes = set()
+        for (nodeFrom, nodeTo, v) in self.getAllEdges():
+            nodes.add(nodeFrom)
+            nodes.add(nodeTo)
+        return nodes
 
     def removeEdge(self, nodeFrom, nodeTo):
         self.graph[nodeFrom] = list(filter(lambda x: x[0] != nodeTo, self.graph.setdefault(nodeFrom, [])))

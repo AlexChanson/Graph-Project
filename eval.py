@@ -17,9 +17,10 @@ def timeFunction(f, message=None):
 
 import pandas as pd
 
-def runTests(constructors, generators, algorithms, testRepetition=100, sizes=[10]):
+def runTests(constructors, generators, algorithms, testRepetition=100, sizes=[10, 20]):
     totalGenerationAmount = sum(map(lambda x: x*testRepetition, sizes))*len(generators)*len(constructors)
     print("Generating {} graphs...".format(totalGenerationAmount))
+
 
     timedAlgorithms = list(map(timeFunction, algorithms))
 
@@ -31,10 +32,25 @@ def runTests(constructors, generators, algorithms, testRepetition=100, sizes=[10
                 for size in sizes}
         for constructor in constructors }
 
-    pprint(testsData)
 
-    df = pd.DataFrame(testsData)
-    df.to_csv("test.csv")
+    series = []
+    for graphType, sizes in testsData.items():
+        for size, generators in sizes.items():
+            for generator, algorithms in generators.items():
+                for (algorithm, v)  in algorithms.items():
+                    for i,l in enumerate(zip(*v)):
+                        if i == 0:
+                            for j, r2 in enumerate(zip(*l)):
+                                if j == 1:
+                                    series.append(pd.Series([graphType, "size: {}".format(size), generator, algorithm, "flow"]+list(r2)))
+                                elif j == 2:
+                                    series.append(pd.Series([graphType, "size: {}".format(size), generator, algorithm, "cost"]+list(r2)))
+                        else:
+                            series.append(pd.Series([graphType, "size: {}".format(size), generator, algorithm, "timings"]+list(l)))
+
+
+    df = pd.DataFrame(series)
+    return df.T
     #pprint(testsData)
 
 
@@ -55,5 +71,5 @@ generators = [tall_networks, fat_networks]
 algorithms = [bg.busacker_gowen]
 
 runTests = timeFunction(runTests, "Tests")
-runTests(constructors, generators, algorithms, 1)
+runTests(constructors, generators, algorithms, 20, [5,20,50])[0].to_csv("test.csv")
 print("Fin")

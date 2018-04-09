@@ -6,7 +6,7 @@ def bellmanFord(graph: Graph, source):
     d = {}
     p = {}
 
-    for vertex in graph.graph.keys():
+    for vertex in graph.getNodes():
         d[vertex] = inf
         p[vertex] = None
 

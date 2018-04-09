@@ -31,7 +31,6 @@ def ecartGraph(graph):
         if current > 0:
             val = cout * (current - _min)
             newGraph.setEdgeValue(y, x, -val)
-
     return newGraph
 
 
@@ -45,19 +44,18 @@ def busacker_gowen(graph, entre, sortie):
     cout = 0.0
     while True:
         graphEcartCalculated = ecartGraph(graph)
-        print("tick")
-        p, d = bellmanFord(graphEcartCalculated, "E")
-        print("tock")
+        try:
+            p, d = bellmanFord(graphEcartCalculated, "E")
+        except Exception:
+            break
         current = sortie
         chain = []
         while current != entre:
             chain.insert(0, current)
             current = p[current]
-
-
+            if current is None:
+                break
         #chain = pathReconstruction(p, entre, sortie)
-
-        print(chain)
 
         deltas = list()
         for i in range(len(chain) - 1):
@@ -73,6 +71,6 @@ def busacker_gowen(graph, entre, sortie):
             graph.setEdgeValue(chain[i], chain[i + 1], new)
 
         flux += delta
-        #cout += delta * d[(entre, sortie)]
+        cout += delta * d[sortie]
 
     return graph, flux, cout

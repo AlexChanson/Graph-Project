@@ -1,10 +1,13 @@
 from pprint import pprint
 from floyd import floyd2
 from graph import Graph
+from bellaman_ford import bellmanFord
+
 
 # Prend un graphe et retourne le flot nul correspondant
 def getFlotNul(graph):
-    return graph.fmap(lambda x: (x[0], x[1], x[2], 0) )
+    return graph.fmap(lambda x: (float(x[0]), float(x[1]), float(x[2]), 0.0))
+
 
 def pathReconstruction(p, u, v):
     if p.get((u,v), None) is None:
@@ -33,41 +36,48 @@ def ecartGraph(graph):
 
 import math
 
-nit = 0
+def getChain(p, d):
+    pass
+
 
 def busacker_gowen(graph, entre, sortie):
     graph = getFlotNul(graph)
-    flux = 0
-    cout = 0
+    flux = 0.0
+    cout = 0.0
     while True:
-        print("graphe ecart")
         graphEcartCalculated = ecartGraph(graph)
+        print("tick")
+        p, d = bellmanFord(graphEcartCalculated, "E")
+        print("tock")
+        current = sortie
+        chain = []
+        while current != entre:
+            chain.insert(0, current)
+            current = p[current]
 
-        print("floyd")
-        p, d = floyd2(graphEcartCalculated.fmap(float))
 
-        print("path")
-        chain = pathReconstruction(p, entre, sortie)
+        #chain = pathReconstruction(p, entre, sortie)
+
         print(chain)
+
         deltas = list()
         for i in range(len(chain) - 1):
-            suivant = graph.getEdgeValue(chain[i], chain[i+1])
-            value = suivant[3]
+            suivant = graph.getEdgeValue(chain[i], chain[i + 1])
             deltas.append(suivant[1] - suivant[3])
         delta = min(deltas, default=0)
         if delta <= 0:
             break
 
-        print("for 2")
         for i in range(len(chain) - 1):
-            _min, _max, _unit_cost, _current = graph.getEdgeValue(chain[i], chain[i+1])
+            _min, _max, _unit_cost, _current = graph.getEdgeValue(chain[i], chain[i + 1])
             new = (_min, _max, _unit_cost, _current + delta)
-            graph.setEdgeValue(chain[i], chain[i+1], new)
-        print("fin for 2")
+            graph.setEdgeValue(chain[i], chain[i + 1], new)
+
         flux += delta
         cout += delta * d[(entre, sortie)]
     global nit
     nit += 1
     print(nit)
-    return graph, flux, cout
+        #cout += delta * d[(entre, sortie)]
 
+    return graph, flux, cout

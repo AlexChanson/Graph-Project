@@ -1,6 +1,7 @@
 from pprint import pprint
 from floyd import floyd2
 from graph import Graph
+from bellaman_ford import bellmanFord
 
 
 # Prend un graphe et retourne le flot nul correspondant
@@ -34,15 +35,28 @@ def ecartGraph(graph):
     return newGraph
 
 
+def getChain(p, d):
+    pass
+
+
 def busacker_gowen(graph, entre, sortie):
     graph = getFlotNul(graph)
     flux = 0.0
     cout = 0.0
     while True:
         graphEcartCalculated = ecartGraph(graph)
+        print("tick")
+        p, d = bellmanFord(graphEcartCalculated, "E")
+        print("tock")
+        current = sortie
+        chain = []
+        while current != entre:
+            chain.insert(0, current)
+            current = p[current]
 
-        p, d = floyd2(graphEcartCalculated.fmap(id))
-        chain = pathReconstruction(p, entre, sortie)
+
+        #chain = pathReconstruction(p, entre, sortie)
+
         print(chain)
 
         deltas = list()
@@ -59,6 +73,6 @@ def busacker_gowen(graph, entre, sortie):
             graph.setEdgeValue(chain[i], chain[i + 1], new)
 
         flux += delta
-        cout += delta * d[(entre, sortie)]
+        #cout += delta * d[(entre, sortie)]
 
     return graph, flux, cout

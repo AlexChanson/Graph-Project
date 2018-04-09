@@ -3,7 +3,8 @@ from math import floor
 
 
 def rd_flots():
-    return randint(0, 5), randint(5, 10), randint(0, 7)
+    # (min, max, unit_cost)
+    return 0, randint(5, 10), randint(0, 7)
 
 
 def random_level(nb_levels=5, nodes_per=(5, 10), connectivity=0.6, f=rd_flots):

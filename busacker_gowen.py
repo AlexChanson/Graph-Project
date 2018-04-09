@@ -26,11 +26,11 @@ def ecartGraph(graph):
     for (x, y, v) in graph.getAllEdges():
         _min, _max, cout, current = v
         if _max - current > 0:
-            val = cout * (_max - current)
+            val = cout
             newGraph.setEdgeValue(x, y, val)
         if current > 0:
-            val = cout * (current - _min)
-            newGraph.setEdgeValue(y, x, -val)
+            val = -cout
+            newGraph.setEdgeValue(y, x, val)
     return newGraph
 
 import math
@@ -45,10 +45,9 @@ def busacker_gowen(graph, entre, sortie):
     cout = 0.0
     while True:
         graphEcartCalculated = ecartGraph(graph)
-        try:
-            p, d = bellmanFord(graphEcartCalculated, "E")
-        except Exception:
-            break
+
+        p, d = bellmanFord(graphEcartCalculated, "E")
+
         current = sortie
         chain = []
         while current != entre:

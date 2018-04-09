@@ -31,7 +31,7 @@ def runTests(constructors, generators, algorithms, testRepetition=100, sizes=[10
                 for size in sizes}
         for constructor in constructors }
 
-
+    pprint(testsData)
 
     df = pd.DataFrame(testsData)
     df.to_csv("test.csv")

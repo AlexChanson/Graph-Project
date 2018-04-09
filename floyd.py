@@ -22,27 +22,26 @@ def floyd(adj_matrix, f=lambda x:x):
 
 
 def tryAdd(a, b):
-    if math.isfinite(float(a)) and math.isfinite(float(b)):
+    if math.isfinite(a) and math.isfinite(b):
         return a + b
     return math.inf
 
+from pprint import pprint
+
 def floyd2(graph):
-    allnodes = graph.getNodes()
-    n = len(allnodes)
+    allnodes = list(graph.getNodes())
     p = {}
     d = {}
 
-    for i in allnodes:
-        for j in allnodes:
-            edgeVal = graph.getEdgeValue(i, j, math.inf) if i != j else 0
-            d[(i, j)] = edgeVal
-            p[(i, j)] = j
+    for (i, j, v) in graph.getAllEdges():
+        d[(i, j)] = v
+        p[(i, j)] = j
 
     for k in allnodes:
         for i in allnodes:
             for j in allnodes:
-                g = d[(i, j)]
-                h = tryAdd(d.get((i, k)) ,d.get((k, j)))
+                g = d.get((i, j), math.inf)
+                h = tryAdd(d.get((i, k), math.inf) ,d.get((k, j), math.inf))
                 if h < g:
                     d[(i, j)] = h
                     p[(i, j)] = p[(i,k)]

@@ -14,6 +14,9 @@ class Graph:
         else:
             self.graph = {}
 
+    def empty(self):
+        return Graph({})
+
     def addNode(self, node):
         return self.graph.setdefault(node, [])
 
@@ -104,6 +107,9 @@ class MatrixGraph(Graph):
                 for (node, v) in l:
                     self.nodes.add(node)
                     self.matrix[(pn, node)] = v
+
+    def empty(self):
+        return MatrixGraph({})
 
     def addNode(self, node):
         self.nodes.add(node)

@@ -42,7 +42,7 @@ def floyd2(graph):
         for i in allnodes:
             for j in allnodes:
                 g = d[(i, j)]
-                h = tryAdd(d.get((i, k), math.inf) ,d.get((k, j), math.inf ))
+                h = tryAdd(d.get((i, k)) ,d.get((k, j)))
                 if h < g:
                     d[(i, j)] = h
                     p[(i, j)] = p[(i,k)]

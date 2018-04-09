@@ -7,7 +7,7 @@ def getFlotNul(graph):
     return graph.fmap(lambda x: (x[0], x[1], x[2], 0) )
 
 def pathReconstruction(p, u, v):
-    if u == v or p[(u,v)] == v:
+    if p.get((u,v), None):
         return []
     path = [u]
     while u != v:
@@ -30,6 +30,10 @@ def ecartGraph(graph):
 
     return newGraph
 
+import math
+
+nit = 0
+
 def busacker_gowen(graph, entre, sortie):
     graph = getFlotNul(graph)
     flux = 0
@@ -37,14 +41,14 @@ def busacker_gowen(graph, entre, sortie):
     while True:
         graphEcartCalculated = ecartGraph(graph)
 
-        p, d = floyd2(graphEcartCalculated.fmap(id))
+        p, d = floyd2(graphEcartCalculated.fmap(float))
 
         chain = pathReconstruction(p, entre, sortie)
 
         deltas = list()
         for i in range(len(chain) - 1):
             suivant = graph.getEdgeValue(chain[i], chain[i+1])
-
+            value = suivant[3]
             deltas.append(suivant[1] - suivant[3])
         delta = min(deltas, default=0)
         if delta <= 0:
@@ -57,6 +61,7 @@ def busacker_gowen(graph, entre, sortie):
 
         flux += delta
         cout += delta * d[(entre, sortie)]
-
+    global nit
+    nit += 1
     return graph, flux, cout
 

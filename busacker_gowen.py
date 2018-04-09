@@ -2,18 +2,21 @@ from pprint import pprint
 from floyd import floyd2
 from graph import Graph
 
+
 # Prend un graphe et retourne le flot nul correspondant
 def getFlotNul(graph):
-    return graph.fmap(lambda x: (x[0], x[1], x[2], 0) )
+    return graph.fmap(lambda x: (float(x[0]), float(x[1]), float(x[2]), 0.0))
+
 
 def pathReconstruction(p, u, v):
-    if p.get((u,v), None):
-        return []
+    #if p.get((u, v), None):
+    #   return []
     path = [u]
     while u != v:
-        u = p[(u,v)]
+        u = p[(u, v)]
         path.append(u)
     return path
+
 
 def ecartGraph(graph):
     newGraph = Graph()
@@ -30,38 +33,32 @@ def ecartGraph(graph):
 
     return newGraph
 
-import math
-
-nit = 0
 
 def busacker_gowen(graph, entre, sortie):
     graph = getFlotNul(graph)
-    flux = 0
-    cout = 0
+    flux = 0.0
+    cout = 0.0
     while True:
         graphEcartCalculated = ecartGraph(graph)
 
-        p, d = floyd2(graphEcartCalculated.fmap(float))
-
+        p, d = floyd2(graphEcartCalculated.fmap(id))
         chain = pathReconstruction(p, entre, sortie)
+        print(chain)
 
         deltas = list()
         for i in range(len(chain) - 1):
-            suivant = graph.getEdgeValue(chain[i], chain[i+1])
-            value = suivant[3]
+            suivant = graph.getEdgeValue(chain[i], chain[i + 1])
             deltas.append(suivant[1] - suivant[3])
         delta = min(deltas, default=0)
         if delta <= 0:
             break
 
         for i in range(len(chain) - 1):
-            _min, _max, _unit_cost, _current = graph.getEdgeValue(chain[i], chain[i+1])
+            _min, _max, _unit_cost, _current = graph.getEdgeValue(chain[i], chain[i + 1])
             new = (_min, _max, _unit_cost, _current + delta)
-            graph.setEdgeValue(chain[i], chain[i+1], new)
+            graph.setEdgeValue(chain[i], chain[i + 1], new)
 
         flux += delta
         cout += delta * d[(entre, sortie)]
-    global nit
-    nit += 1
-    return graph, flux, cout
 
+    return graph, flux, cout

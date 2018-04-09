@@ -7,7 +7,7 @@ def rd_flots():
     return randint(0, 5), randint(5, 10), randint(0, 7)
 
 
-def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.5, f=rd_flots):
+def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.6, f=rd_flots):
     levels = [[str(x)+'_'+str(y) for y in range(randint(nodes_per[0], nodes_per[1]))] for x in range(nb_levels)]
     graph = {}
     for i in range(nb_levels - 1):
@@ -23,6 +23,7 @@ def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.5, f=rd_flots):
                     graph[node] = [(choosen, f())]
 
     graph["E"] = []
+    graph["S"] = []
     for node in levels[0]:
         graph["E"].append((node, f()))
     for node in levels[-1]:

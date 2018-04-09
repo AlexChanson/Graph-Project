@@ -2,16 +2,14 @@ from random import randint, sample
 from math import floor
 from pprint import pprint
 
+
 def rd_flots():
     return randint(0, 5), randint(5, 10), randint(0, 7)
 
+
 def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.5, f=rd_flots):
-    levels = []
+    levels = [[str(x)+'_'+str(y) for y in range(randint(nodes_per[0], nodes_per[1]))] for x in range(nb_levels)]
     graph = {}
-    for i in range(nb_levels):
-        levels.append([])
-        for j in range(randint(nodes_per[0], nodes_per[1])):
-            levels[i].append(str(i) + "_" + str(j))
     for i in range(nb_levels - 1):
         level = levels[i]
         q_nb = max(1, floor(floor(connectivity * (len(level) * len(levels[i + 1]))) / len(level)))
@@ -30,9 +28,8 @@ def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.5, f=rd_flots):
     for node in levels[-1]:
         graph[node] = [("S", f())]
 
-    pprint(graph)
+    #pprint(graph)
     return graph
-
 
 
 def random(self, n, q, f=lambda x: randint(1, 10)):

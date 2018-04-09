@@ -60,7 +60,11 @@ def busacker_gowen(graph, entre, sortie):
         deltas = list()
         for i in range(len(chain) - 1):
             suivant = graph.getEdgeValue(chain[i], chain[i + 1])
-            deltas.append(suivant[1] - suivant[3])
+            if suivant is not None:
+                deltas.append(suivant[1] - suivant[3])
+            else:
+                suivant = graph.getEdgeValue(chain[i + 1], chain[i])
+                deltas.append(suivant[1] - suivant[3])
         delta = min(deltas, default=0)
         if delta <= 0:
             break

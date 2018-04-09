@@ -4,7 +4,7 @@ from math import floor
 
 def rd_flots():
     # (min, max, unit_cost)
-    return 0, randint(5, 10), randint(0, 7)
+    return 0, randint(5, 10), randint(1, 7)
 
 
 def random_level(nb_levels=5, nodes_per=(5, 10), connectivity=0.6, f=rd_flots):

@@ -20,20 +20,11 @@ class Graph:
     def getNodes(self):
         return list(set(map(lambda x: x, self.graph.keys())))
 
-    def addEdge(self, label1, label2):
-        if label1 in self.graph.keys() and label2 in self.graph.keys():
-            self.graph[label1].add(label2)
-
     def removeEdge(self, nodeFrom, nodeTo):
         self.graph[nodeFrom] = list(filter(lambda x: x[0] != nodeTo, self.graph.setdefault(nodeFrom, [])))
 
     def display(self):
         pprint.pprint(self.graph)
-
-    def children(self, label):
-        if label in self.graph.keys():
-            return self.graph[label]
-        return set()
 
     def getEdgesFrom(self, node, defaultValue=[]):
         return self.graph.get(node, defaultValue)
@@ -89,9 +80,6 @@ class Graph:
     def edgeNumber(self):
         return sum(len(x) for x in self.graph.itervalues())
 
-    def getNpMatrix(selfs):
-        numpy.matrix
-
     def fmap(self, f):
         returnedGraph = {}
 
@@ -99,34 +87,66 @@ class Graph:
             returnedGraph[node] = list(map(lambda x: (x[0], f(x[1])), children))
         return Graph(returnedGraph)
 
+    def __repr__(self):
+        return "Graph"
+
 
 
 
 
 class MatrixGraph(Graph):
     def __init__(self, dic={}):
+        self.nodes = set()
+        self.matrix = {}
         if dic is not None:
-            self.matrix = {}
-        else:
-            self.matrix = {}
+            for pn, l in dic.items():
+                self.nodes.add(pn)
+                for (node, v) in l:
+                    self.nodes.add(node)
+                    self.matrix[(pn, node)] = v
 
-    def addNode(self, label):
-        pass
+    def addNode(self, node):
+        self.nodes.add(node)
 
     def getNodes(self):
-        pass
+        return list(self.nodes)
 
-    def addEdge(self, label1, label2):
-        pass
+    def removeEdge(self, nodeFrom, nodeTo):
+        return self.matrix.pop((nodeFrom, nodeTo), None)
 
     def display(self):
         pprint.pprint(self.matrix)
 
-    def children(self, label):
-        pass
+    def getEdgesFrom(self, node):
+        return list(map(lambda x: (x[0][1], x[1]), filter(lambda y: y[0][0] == node, self.matrix)))
 
-    def importCSV(self, path):
-        pass
+    def getEdgesTo(self, node):
+        return list(map(lambda x: (x[0][1], x[1]), filter(lambda y: y[0][1] == node, self.matrix)))
 
-    def random(self, n, q):
-        pass
+    def getEdgeValue(self, nodeFrom, nodeTo, defaultValue=None):
+        return self.matrix.get((nodeFrom, nodeTo), defaultValue)
+
+    def getAllEdges(self):
+        return list(map(lambda x: (x[0][0], x[0][1], x[1]), self.matrix.items()))
+
+    def nodeExists(self, node):
+        return node in self.nodes
+
+    def setEdgeValue(self, nodeFrom, nodeTo, value):
+        self.addNode(nodeFrom)
+        self.addNode(nodeTo)
+        self.matrix[(nodeFrom, nodeTo)] = value
+
+    def nodeNumber(self):
+        return len(self.nodes)
+
+    def edgeNumber(self):
+        return len(self.matrix)
+
+    def fmap(self, f):
+        newGraph = MatrixGraph()
+        newGraph.matrix = {k: f(v) for k, v in self.matrix.items()}
+        return newGraph
+
+    def __repr__(self):
+        return "Matrix Graph"

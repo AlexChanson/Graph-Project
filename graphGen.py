@@ -30,7 +30,6 @@ def random_level(nb_levels=5, nodes_per=(2, 10), connectivity=0.5, f=rd_flots):
     for node in levels[-1]:
         graph[node] = [("S", f())]
 
-    pprint(graph)
     return graph
 
 

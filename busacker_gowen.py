@@ -26,10 +26,10 @@ def ecartGraph(graph):
     for (x, y, v) in graph.getAllEdges():
         _min, _max, cout, current = v
         if _max - current > 0:
-            val = cout
+            val = cout * (_max - current)
             newGraph.setEdgeValue(x, y, val)
         if current > 0:
-            val = cout
+            val = cout * ( current - _min )
             newGraph.setEdgeValue(y, x, val)
     return newGraph
 

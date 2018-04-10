@@ -15,5 +15,5 @@ constructors = [graph.Graph, graph.MatrixGraph]
 generators = [tall_networks, fat_networks]
 algorithms = [bg.busacker_gowen]
 
-compareAlgorithms([bg.busacker_gowen], graph.Graph, tall_networks, meanMinMaxTiming).to_csv("test.csv")
+compareAlgorithms([bg.busacker_gowen], graph.Graph, tall_networks, meanMinMaxTiming, repetition=10, sizes=range(5,35)).T.to_csv("test.csv")
 print("Fin")

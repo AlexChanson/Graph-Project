@@ -90,3 +90,4 @@ def compareAlgorithms(algorithms, constructor, generator, evaluator, sizes=[5, 1
     df = pd.concat(result, axis=1)
 
     return df
+

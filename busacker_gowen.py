@@ -19,24 +19,19 @@ def pathReconstruction(p, u, v):
     return path
 
 
-def ecartGraph(graph):
-    newGraph = Graph()
+def ecart_graph(graph):
+    new_graph = Graph()
     for node in graph.getNodes():
-        newGraph.addNode(node)
+        new_graph.addNode(node)
     for (x, y, v) in graph.getAllEdges():
         _min, _max, cout, current = v
         if _max - current > 0:
             val = cout * (_max - current)
-            newGraph.setEdgeValue(x, y, val)
+            new_graph.setEdgeValue(x, y, val)
         if current > 0:
             val = cout * ( current - _min )
-            newGraph.setEdgeValue(y, x, val)
-    return newGraph
-
-import math
-
-def getChain(p, d):
-    pass
+            new_graph.setEdgeValue(y, x, val)
+    return new_graph
 
 
 def busacker_gowen(graph, entre, sortie):
@@ -44,9 +39,7 @@ def busacker_gowen(graph, entre, sortie):
     flux = 0.0
     cout = 0.0
     while True:
-        graphEcartCalculated = ecartGraph(graph)
-
-        p, d = bellmanFord(graphEcartCalculated, "E")
+        p, d = bellmanFord(ecart_graph(graph), "E")
 
         current = sortie
         chain = []
@@ -55,7 +48,6 @@ def busacker_gowen(graph, entre, sortie):
             current = p[current]
             if current is None:
                 break
-        #chain = pathReconstruction(p, entre, sortie)
 
         deltas = list()
         for i in range(len(chain) - 1):
@@ -85,3 +77,6 @@ def busacker_gowen(graph, entre, sortie):
         cout += delta * d[sortie]
 
     return graph, flux, cout
+
+
+busacker_gowen.__setattr__("authors", ["Ben Crulis", "Alexandre Chanson"])

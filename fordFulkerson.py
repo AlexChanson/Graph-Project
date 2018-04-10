@@ -1,4 +1,3 @@
-from testData import flots
 from graph import Graph
 
 def fordFulkerson(graph, startNode, endNode):
@@ -34,5 +33,3 @@ def fordFulkerson(graph, startNode, endNode):
 
 
 fordFulkerson.__setattr__("authors", ["Clement Derouet", "Christopher Vallot"])
-
-print fordFulkerson(Graph(flots), "E", "R")

@@ -1,43 +1,32 @@
-from queue import Queue
-import busacker_gowen as bg
+def fordFulkerson(graph, startNode, endNode):
+    marking = {}
+    maxEdges = {}
+
+    for _from, to, label in graph.getAllEdges():
+        maxEdges[(_from, to)] = label
+        marking[(_from, to)] = 0
 
 
-def chaineAmeliorante(flow, startNode, endNode):
-    q = []
-    marking = set()
+    def fordFulkersonRec(_max, prevNode, currentNode):
+        prevEdge = (prevNode, currentNode)
 
-    ret = [startNode]
+        if currentNode != endNode:
+            for nextNode, label in graph.getEdgesFrom(currentNode):
+                nextEdge = (currentNode, nextNode)
+                originalNextMarking = marking[nextEdge]
 
-    marking.add(startNode)
-    q.append(startNode)
+                _max = min(maxEdges[prevEdge] - marking[prevEdge], maxEdges[nextEdge] - marking[nextEdge])
 
-    cond = True
-    while cond:
-        x = q.pop(0)
-        addNode = True
-        for y, label in filter(lambda k: k[0] not in marking, flow.getEdgesFrom(x)):
-            _min, _max, cost, actual = label
+                fordFulkersonRec(_max, currentNode, nextNode)
 
-            if actual < _max:
-                if addNode and x == ret[-1]:
-                    ret.append(y)
-                    addNode = False
-                marking.add(y)
-                q.append(y)
+                marking[prevEdge] += marking[nextEdge] - originalNextMarking
+        else:
+            marking[prevEdge] += _max
 
-        for y, label in filter(lambda k: k[0] not in marking, flow.getEdgesTo(x)):
-            _min, _max, cost, actual = label
+    for nextNode, label in graph.getEdgesFrom(startNode):
+        fordFulkersonRec(label, startNode, nextNode)
 
-            if actual > _min:
-                marking.add(y)
-                q.append(y)
-        cond = len(q) > 0 and endNode not in marking
-    if ret[-1] == endNode:
-        return ret
-    else:
-        return []
+    return sum([marking[(startNode, nextNode)] for nextNode, label in graph.getEdgesFrom(startNode)])
 
-def fordFulkerson(graph, starting, ending):
-    return chaineAmeliorante(bg.getFlotNul(graph), starting, ending)
 
 fordFulkerson.__setattr__("authors", ["Clement Derouet", "Christopher Vallot"])

@@ -53,23 +53,40 @@ def runTests(constructors, generators, algorithms, testRepetition=100, sizes=[10
     return df.T
     #pprint(testsData)
 
+def meanMinMaxTiming(listOfResults):
+    flows, costs, timings = list(map(list, zip(*map(lambda x: (x[0][1], x[0][2], x[1]), listOfResults))))
+    returned = {}
 
-import graph
-import fordFulkerson as ff
-import busacker_gowen as bg
-import graphGen
+    returned["meanflow"] = sum(flows)/ len(flows)
+    returned["meanCost"] = sum(costs)/ len(costs)
+    returned["meanTime (s)"] = sum(timings)/ len(timings)
 
-def tall_networks(n):
-    return graphGen.random_level(n, (7,10))
-
-def fat_networks(n):
-    return graphGen.random_level(10, (n,n))
+    return returned
 
 
-constructors = [graph.Graph, graph.MatrixGraph]
-generators = [tall_networks, fat_networks]
-algorithms = [bg.busacker_gowen]
+def testAlgorithm(algorithm, constructor, generator, evaluator, sizes=[5,10],  repetition=5):
 
-runTests = timeFunction(runTests, "Tests")
-runTests(constructors, generators, algorithms, 20, [5,20,50])[0].to_csv("test.csv")
-print("Fin")
+    graphData = {graphSize: [constructor(generator(graphSize)) for i in range(repetition)] for graphSize in sizes}
+
+    evaluated_data = {}
+
+    timedAlgorithm = timeFunction(algorithm)
+
+    for size, graphList in graphData.items():
+        evaluated = evaluator([timedAlgorithm(graph, "E", "S") for graph in graphList])
+        evaluated_data[size] = evaluated
+
+    #pprint(evaluated_data)
+
+    #s = pd.Series(evaluated_data, name=algorithm.__name__)
+
+    return evaluated_data
+
+def compareAlgorithms(algorithms, constructor, generator, evaluator, sizes=[5, 10], repetition=5):
+
+    result = {algorithm.__name__ : pd.DataFrame(testAlgorithm(algorithm, constructor, generator, evaluator, sizes, repetition)) for algorithm in algorithms}
+
+
+    df = pd.concat(result, axis=1)
+
+    return df

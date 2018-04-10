@@ -71,5 +71,5 @@ generators = [tall_networks, fat_networks]
 algorithms = [bg.busacker_gowen]
 
 runTests = timeFunction(runTests, "Tests")
-runTests(constructors, generators, algorithms, 20, [5,20,50])[0].to_csv("test.csv")
+runTests(constructors, generators, algorithms, 5, [5,10])[0].to_csv("test.csv")
 print("Fin")

@@ -39,7 +39,7 @@ def busacker_gowen(graph, entre, sortie):
     flux = 0.0
     cout = 0.0
     while True:
-        p, d = bellmanFord(ecart_graph(graph), "E")
+        p, d = bellmanFord(ecart_graph(graph), entre)
 
         current = sortie
         chain = []

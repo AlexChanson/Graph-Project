@@ -1,9 +1,12 @@
+from graph import Graph
+
 def fordFulkerson(graph, startNode, endNode):
     marking = {}
     maxEdges = {}
 
     for _from, to, label in graph.getAllEdges():
-        maxEdges[(_from, to)] = label
+        _min, _max, cost = label
+        maxEdges[(_from, to)] = _max
         marking[(_from, to)] = 0
 
 
